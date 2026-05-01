@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Emissão de CO2</title>
+    <!-- Importando o CSS do Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🌿 Calculadora de Emissão de CO₂</h1>
+        <p>Calcule as emissões de CO₂ das suas viagens e contribua para um planeta mais sustentável</p>
+    </div>
+    
+    <div class="form-section">
+        <div class="form-group">
+            <label>Origem</label>
+            <input type="text" id="origem" placeholder="Digite a cidade de origem">
+        </div>
+        
+        <div class="form-group">
+            <label>Destino</label>
+            <input type="text" id="destino" placeholder="Digite a cidade de destino">
+        </div>
+        
+        <div class="form-group">
+            <label>Distância (km)</label>
+            <!-- Adicionado min="0" para evitar números negativos -->
+            <input type="number" id="distancia" placeholder="A distância será preenchida automaticamente" min="0" disabled>
+            <label class="checkbox-group">
+                <input type="checkbox" id="checkManual"> Inserir distância manualmente
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>Meio de Transporte</label>
+            <div class="transport-options">
+                <label>
+                    <input type="radio" name="transporte" value="bicicleta">
+                    <div class="transport-card">
+                        <span class="icon">🚲</span>
+                        <span class="name">Bicicleta</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="transporte" value="carro" checked>
+                    <div class="transport-card">
+                        <span class="icon">🚗</span>
+                        <span class="name">Carro</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="transporte" value="onibus">
+                    <div class="transport-card">
+                        <span class="icon">🚌</span>
+                        <span class="name">Ônibus</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="transporte" value="caminhao">
+                    <div class="transport-card">
+                        <span class="icon">🚚</span>
+                        <span class="name">Caminhão</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-calcular" onclick="calcularEmissao()">Calcular Emissão</button>
+
+    <div id="resultados">
+        <!-- Resultados Principais -->
+        <div class="result-section">
+            <h3>Resultados da Emissão</h3>
+            <div class="grid-2">
+                <div class="data-card">
+                    <div class="data-label">🗺️ Rota</div>
+                    <div class="data-value neutral" id="resRota">-</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">📏 Distância</div>
+                    <div class="data-value neutral"><span id="resDistancia">-</span> km</div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="data-card highlight">
+                    <div class="data-label">🌿 Emissão de CO₂</div>
+                    <div class="data-value"><span id="resEmissao">-</span> kg</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">Meio de Transporte</div>
+                    <div class="data-value neutral" id="resTransporte">-</div>
+                </div>
+            </div>
+
+            <div class="data-card highlight" id="cardEconomia" style="display:none; margin-top: 15px;">
+                <div class="data-label">✅ Economia vs Carro</div>
+                <div class="data-value neutral" style="font-size: 14px;">
+                    <strong style="color: var(--primary-green); font-size: 18px;" id="resEconomiaKg"></strong><br>
+                    <span id="resEconomiaPerc"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Créditos de Carbono -->
+        <div class="result-section">
+            <h3>Créditos de Carbono</h3>
+            <div class="grid-2">
+                <div class="data-card">
+                    <div class="data-label">🌳 Créditos Necessários</div>
+                    <div class="data-value" id="resCreditos">-</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">💰 Custo Estimado</div>
+                    <div class="data-value">R$ <span id="resCusto">-</span></div>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px; background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee;">
+                <strong>O que são Créditos de Carbono?</strong><br>
+                São certificados que representam a redução de uma tonelada de CO₂ da atmosfera. Ao comprar créditos, você compensa as suas emissões financiando projetos de preservação ambiental.
+            </p>
+        </div>
+
+        <!-- Comparação -->
+        <div class="result-section">
+            <h3>Comparação entre Meios de Transporte</h3>
+            <div id="listaComparacao">
+                <!-- Preenchido via Javascript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Importando o Javascript do Flask -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
